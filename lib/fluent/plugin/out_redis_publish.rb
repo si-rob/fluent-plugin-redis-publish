@@ -4,6 +4,7 @@ module Fluent
 
     config_param :host,   :string,  :default => '127.0.0.1'
     config_param :path,   :string,  :default => nil
+    config_param :url,    :string,  :default => nil
     config_param :port,   :integer, :default => 6379
     config_param :db,     :integer, :default => 0
     config_param :format, :string,  :default => 'json'
@@ -26,6 +27,8 @@ module Fluent
 
       if @path
         @redis = Redis.new(:path => @path, :db => @db)
+      elsif @url
+        @redis = Redis.new(:url => @url)
       else
         @redis = Redis.new(:host => @host, :port => @port, :db => @db);
       end
