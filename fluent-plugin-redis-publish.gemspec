@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.version       = "0.1.1"
   gem.authors       = ["Daisuke Murase"]
   gem.email         = ["typester@cpan.org"]
-  gem.summary       = "fluent output plugin publishing logs to redis pub/sub"
+  gem.summary       = "fluent output plugin publishing logs to redis pub/sub - Updated for Life.Church"
   gem.homepage      = "https://github.com/typester/fluent-plugin-redis-publish"
   gem.license       = 'MIT'
 

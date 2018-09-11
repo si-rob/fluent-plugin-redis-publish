@@ -1,13 +1,15 @@
 module Fluent
+
+  # based on https://github.com/typester/fluent-plugin-redis-publish
+  # editted to allow for setting password in config
   class RedisPublishOutput < Fluent::BufferedOutput
     Fluent::Plugin.register_output('redis_publish', self)
 
-    config_param :host,   :string,  :default => '127.0.0.1'
-    config_param :path,   :string,  :default => nil
-    config_param :url,    :string,  :default => nil
-    config_param :port,   :integer, :default => 6379
-    config_param :db,     :integer, :default => 0
-    config_param :format, :string,  :default => 'json'
+    config_param :host,     :string,  :default => '127.0.0.1'
+    config_param :port,     :integer, :default => 6379
+    config_param :db,       :integer, :default => 0
+    config_param :password, :string,  :default => nil
+    config_param :format,   :string,  :default => 'json'
 
     attr_reader :redis
 
@@ -24,18 +26,16 @@ module Fluent
 
     def start
       super
-
-      if @path
-        @redis = Redis.new(:path => @path, :db => @db)
-      elsif @url
-        @redis = Redis.new(:url => @url)
+      if @password
+        @redis = Redis.new(:host => @host, :port => @port, :db => @db, :password => @password, :thread_safe => true)
       else
-        @redis = Redis.new(:host => @host, :port => @port, :db => @db);
+        @redis = Redis.new(:host => @host, :port => @port, :db => @db, :thread_safe => true)
       end
     end
 
     def shutdown
       super
+      @redis.quit
     end
 
     def format(tag, time, record)
